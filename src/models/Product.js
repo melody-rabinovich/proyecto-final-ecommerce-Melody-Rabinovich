@@ -6,7 +6,7 @@ export async function getAllProducts(){
         const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productos;
     } catch(error){
-        console.error (error) // arreglar
+        console.error (error) 
         return error;
     }
 }
@@ -14,8 +14,6 @@ export async function getAllProducts(){
 export async function filtrar(filtro, nombreFiltro){
     
     try{
-        // const query = db.collection('productos').where(nombreFiltro, '==', filtro);
-        
         let query;
         if (nombreFiltro == "precio"){
             query = db.collection('productos').where(nombreFiltro, '<=', filtro);
