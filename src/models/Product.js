@@ -41,7 +41,7 @@ export async function buscarProducto(nombreBuscado){
     try{
         const snapshot = await db.collection("productos").where("nombre", "==", nombreBuscado).get();
         if(snapshot.empty){
-            return {error: `no se encontró ningun producto con el nombre ${nombreBuscado}`, status: 404}
+            return null
         }
 
         const doc = snapshot.docs[0];

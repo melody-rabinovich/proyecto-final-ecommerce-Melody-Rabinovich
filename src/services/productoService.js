@@ -49,11 +49,9 @@ export async function crearProducto(nombre, categoria, precio, stock){
     if (typeof stock != "number") return {error: "el stock debe ser un numero", status: 400}
 
     
-    // paso extra para mejorar la claridad:
-    // devuelve error cuando NO SE ENCUENTRA un producto. Pero para este caso, yo necesito que el producto NO exista
-    const productoBuscado = await model.buscarProducto(nombre)
-    const encontrado = productoBuscado.error? false : true
-    if(encontrado){  // osaea, que si  fue encontrado, ya existe y no lo puedo volver a crear
+   
+    const encontrado = await model.buscarProducto(nombre)
+    if(encontrado != null){
         return {error: "producto ya existente", status: 400}
     } else{
         const resultado = await model.crearProducto(nombre, categoria, precio, stock);
