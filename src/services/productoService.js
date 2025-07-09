@@ -14,19 +14,19 @@ export async function getAllProducts(){
     return resultado;
 }
 
-export async function buscar(nombre, categoria, precio){
+export async function filtrar(nombre, categoria, precio){
     if(!nombre && !categoria && !precio){
         return {error:'debe ingresar datos validos para realizar la búsqueda', status:400}
     } else {
         let resultado;
         if(nombre){
-            resultado = await model.buscar(nombre, "nombre")
+            resultado = await model.filtrar(nombre, "nombre")
         }
         if(categoria){
-            resultado = await model.buscar(categoria, "categoria")
+            resultado = await model.filtrar(categoria, "categoria")
         }
         if(precio){
-            resultado = await model.buscar(parseInt(precio), "precio")
+            resultado = await model.filtrar(parseInt(precio), "precio")
         }
 
         console.log("resultado: "  + resultado)
@@ -37,4 +37,31 @@ export async function buscar(nombre, categoria, precio){
         }
         
     }
+}
+
+export async function crearProducto(nombre, categoria, precio, stock){
+    if(!nombre || !categoria || !precio || !stock){
+        return {error: "faltan datos necesarios para crear un producto", status: 400}
+    }
+    if (typeof nombre != "string") return {error: "el nombre del producto debe ser una cadena", status: 400}
+    if (typeof categoria != "string") return {error: "el nombre de la categoria debe ser una cadena", status: 400}
+    if (typeof precio != "number") return {error: "el precio debe ser un numero", status: 400}
+    if (typeof stock != "number") return {error: "el stock debe ser un numero", status: 400}
+
+    
+    // paso extra para mejorar la claridad:
+    // devuelve error cuando NO SE ENCUENTRA un producto. Pero para este caso, yo necesito que el producto NO exista
+    const productoBuscado = await model.buscarProducto(nombre)
+    const encontrado = productoBuscado.error? false : true
+    if(encontrado){  // osaea, que si  fue encontrado, ya existe y no lo puedo volver a crear
+        return {error: "producto ya existente", status: 400}
+    } else{
+        const resultado = await model.crearProducto(nombre, categoria, precio, stock);
+        if (resultado.error){
+            return { error: resultado.error, status: 500}
+        } else {
+            return resultado
+        }
+    }
+
 }

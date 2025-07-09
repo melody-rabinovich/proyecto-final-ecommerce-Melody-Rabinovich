@@ -11,7 +11,7 @@ export async function getAllProducts(){
     }
 }
 
-export async function buscar(filtro, nombreFiltro){
+export async function filtrar(filtro, nombreFiltro){
     
     try{
         // const query = db.collection('productos').where(nombreFiltro, '==', filtro);
@@ -35,4 +35,40 @@ export async function buscar(filtro, nombreFiltro){
         console.error(error);
         return error
     }
+}
+
+export async function buscarProducto(nombreBuscado){
+    try{
+        const snapshot = await db.collection("productos").where("nombre", "==", nombreBuscado).get();
+        if(snapshot.empty){
+            return {error: `no se encontró ningun producto con el nombre ${nombreBuscado}`, status: 404}
+        }
+
+        const doc = snapshot.docs[0];
+        return {
+            id: doc.id,
+            ...doc.data()
+        };
+
+    } catch (error){
+        console.error(error);
+        return error
+    }
+}
+
+export async function crearProducto(nombre, categoria, precio, stock){
+    try{
+        const nuevoProducto = {
+            nombre: nombre,
+            categoria: categoria,
+            precio: precio,
+            stock: stock
+        }
+        await db.collection("productos").add(nuevoProducto);
+        return {message: productoAgregado, nuevoProducto}
+    } catch (error){
+        console.error(error);
+        return error
+    }
+    
 }

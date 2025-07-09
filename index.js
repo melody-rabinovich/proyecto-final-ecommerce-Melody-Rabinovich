@@ -1,7 +1,10 @@
 import cors from 'cors'
 import express from 'express'
-//import authRouter from './src/routes/authRouter.js'
+import authRouter from './src/routes/authRouter.js'
 import productoRouter from './src/routes/productoRouter.js'
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const PORT = 3000;
 const app = express();
@@ -13,6 +16,7 @@ app.use(cors({
 
 app.use(express.json())
 
+app.use(authRouter);
 app.use(productoRouter)
 
 app.get('/', (req, res)=>{
