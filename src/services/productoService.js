@@ -52,6 +52,19 @@ export async function productoPrecioMenorA (precio){
     
 }
 
+export async function buscarProducto (nombre){
+    if(!nombre){
+        return {error: "debe ingresar un nombre para realizar la búsqueda", status: 400}
+    } else {
+        const resultado = await model.buscarProducto(nombre);
+        if (resultado == null){
+            return {error: "no se encontró un producto con ese nombre", status:404}
+        } else {
+            return resultado
+        }
+    }
+}
+
 export async function crearProducto(nombre, categoria, precio, stock){
     const validacion = validarDatos(nombre, categoria, precio, stock)
     if (validacion !== "OK"){

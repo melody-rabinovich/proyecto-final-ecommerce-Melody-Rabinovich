@@ -33,6 +33,17 @@ export const productoPrecioMenorA = async (req, res) =>{
 
 }
 
+export const buscarProducto = async (req, res) => {
+    const {nombre} = req.params
+    const resultado = await service.buscarProducto(nombre);
+
+    if (resultado.error) {
+        res.status(resultado.status).json({error: resultado.error})
+    } else {
+        res.status(200).json(resultado)
+    }
+}
+
 export const crearProducto = async (req, res) => {
     const {nombre, categoria, precio, stock} = req.body
     const resultado = await service.crearProducto(nombre, categoria, precio, stock);
