@@ -14,8 +14,8 @@ export async function getAllProducts(){
     return resultado;
 }
 
-export async function filtrar(nombre, categoria, precio){
-    if(!nombre && !categoria && !precio){
+export async function filtrar(nombre, categoria){
+    if(!nombre && !categoria){
         return {error:'debe ingresar datos validos para realizar la búsqueda', status:400}
     } else {
         let resultado;
@@ -25,12 +25,8 @@ export async function filtrar(nombre, categoria, precio){
         if(categoria){
             resultado = await model.filtrar(categoria, "categoria")
         }
-        if(precio){
-            resultado = await model.filtrar(parseInt(precio), "precio")
-        }
 
-        console.log("resultado: "  + resultado)
-        if(resultado == 0){
+        if(resultado.length == 0){
             return {error: "No se encontraron productos con ese filtro", status: 404}
         } else {
             return resultado
@@ -39,17 +35,30 @@ export async function filtrar(nombre, categoria, precio){
     }
 }
 
-export async function crearProducto(nombre, categoria, precio, stock){
-    if(!nombre || !categoria || !precio || !stock){
-        return {error: "faltan datos necesarios para crear un producto", status: 400}
+export async function productoPrecioMenorA (precio){
+    if(!precio || typeof parseInt(precio) == NaN ){
+        return {error: "se requiere un precio y debe ser un número", status : 401 }
+    } else{
+        const resultado = await model.productosPrecioMenorA(parseInt(precio))
+
+        if( resultado.length == 0){ 
+            return {error: "No se encontraron productos con ese filtro", status: 404}
+        } else if(resultado.error) {
+            return {error: resultado.error, status: 500}
+        } else {
+            return resultado
+        }
     }
-    if (typeof nombre != "string") return {error: "el nombre del producto debe ser una cadena", status: 400}
-    if (typeof categoria != "string") return {error: "el nombre de la categoria debe ser una cadena", status: 400}
-    if (typeof precio != "number") return {error: "el precio debe ser un numero", status: 400}
-    if (typeof stock != "number") return {error: "el stock debe ser un numero", status: 400}
+    
+}
+
+export async function crearProducto(nombre, categoria, precio, stock){
+    const validacion = validarDatos(nombre, categoria, precio, stock)
+    if (validacion !== "OK"){
+        return validacion
+    }
 
     
-   
     const encontrado = await model.buscarProducto(nombre)
     if(encontrado != null){
         return {error: "producto ya existente", status: 400}
@@ -62,4 +71,31 @@ export async function crearProducto(nombre, categoria, precio, stock){
         }
     }
 
+}
+
+export async function modificarProducto(nombre, categoria, precio, stock){
+    const validacion = validarDatos(nombre, categoria, precio, stock)
+    if (validacion !== "OK"){
+        return validacion
+    } else {
+        const resultado = await model.modificarProducto(nombre, categoria, precio, stock)
+        if (resultado.error){
+            return { error: resultado.error, status: 400}
+        } else {
+            return resultado
+        }
+    }
+}
+
+// Funciones de uso interno
+function validarDatos(nombre, categoria, precio, stock){
+    if(!nombre || !categoria || !precio || !stock){
+        return {error: "faltan datos necesarios para el producto", status: 400}
+    }
+    if (typeof nombre != "string") return {error: "el nombre del producto debe ser una cadena", status: 400}
+    if (typeof categoria != "string") return {error: "el nombre de la categoria debe ser una cadena", status: 400}
+    if (typeof precio != "number") return {error: "el precio debe ser un numero", status: 400}
+    if (typeof stock != "number") return {error: "el stock debe ser un numero", status: 400}
+
+    return "OK"
 }

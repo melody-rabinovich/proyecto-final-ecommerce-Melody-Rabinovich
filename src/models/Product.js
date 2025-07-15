@@ -14,21 +14,29 @@ export async function getAllProducts(){
 export async function filtrar(filtro, nombreFiltro){
     
     try{
-        let query;
-        if (nombreFiltro == "precio"){
-            query = db.collection('productos').where(nombreFiltro, '<=', filtro);
-        } else{
-            query = db.collection('productos').where(nombreFiltro, '==', filtro);
-        }
-
-        const snapshot = await query.get();
-        const productos = snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        const snapshot = await db.collection('productos').get();
+        const productos = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .filter(p => p[nombreFiltro].toLowerCase().includes(filtro.toLowerCase()));
 
         return productos;
           
+    } catch (error){
+        console.error(error);
+        return error
+    }
+}
+
+export async function productosPrecioMenorA(precio){
+    try{
+        const snapshot = await db.collection("productos").where("precio", "<=", precio).get()
+        
+        const productos = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }))
+
+        return productos;
     } catch (error){
         console.error(error);
         return error
@@ -63,10 +71,39 @@ export async function crearProducto(nombre, categoria, precio, stock){
             stock: stock
         }
         await db.collection("productos").add(nuevoProducto);
-        return {message: productoAgregado, nuevoProducto}
+        return {message: "producto agregado", nuevoProducto}
     } catch (error){
         console.error(error);
         return error
     }
     
+}
+
+export async function modificarProducto(nombre, categoria, precio, stock){
+    try{
+        let producto = await buscarProducto(nombre);
+        if (producto  == null) {
+            return {error: "no se encontró el producto", status:404}
+        } else {
+            const id = producto.id;
+            await db.collection('productos').doc(id).update({
+                categoria,
+                precio,
+                stock
+            });
+            
+            const docActualizado = await db.collection('productos').doc(id).get();
+
+            return {
+                message: "producto modificado",
+                producto: {
+                    id: docActualizado.id,
+                    ...docActualizado.data()
+                }
+            };
+        }
+    } catch (error){
+        console.error(error);
+        return error //{error: "error al actualizar el producto", status: 500}
+    }
 }
