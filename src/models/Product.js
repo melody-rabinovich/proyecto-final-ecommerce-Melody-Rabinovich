@@ -107,3 +107,13 @@ export async function modificarProducto(nombre, categoria, precio, stock){
         return error //{error: "error al actualizar el producto", status: 500}
     }
 }
+
+export async function eliminarProducto(id){
+    try {
+        await db.collection('productos').doc(id).delete();
+        return { message: "Producto eliminado correctamente", status : 200 };
+    } catch (error) {
+        console.error(error);
+        return { error: "Error al eliminar producto" };
+    }
+}

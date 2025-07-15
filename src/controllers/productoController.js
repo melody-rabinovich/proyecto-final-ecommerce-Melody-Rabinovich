@@ -55,3 +55,14 @@ export const modificarProducto = async (req, res) => {
         res.status(202).json(resultado)
     }
 }
+
+export const eliminarProducto = async (req, res) => {
+    const {nombre} = req.params
+    const resultado = await service.eliminarProducto(nombre)
+
+    if(resultado.error){
+        res.status(resultado.status).json({error: resultado.error})
+    } else {
+        res.status(resultado.status).json({message: resultado.message})
+    }
+}

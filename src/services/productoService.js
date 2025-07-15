@@ -87,6 +87,25 @@ export async function modificarProducto(nombre, categoria, precio, stock){
     }
 }
 
+export async function eliminarProducto(nombre){
+    if (!nombre){
+        return {error: "se debe ingresar un nombre", status: 401}
+    } 
+
+    const producto = await model.buscarProducto(nombre);
+    if (producto == null){ 
+        return {error: "producto no encontrado", status: 404}
+    } else {
+        const resultado = await model.eliminarProducto(producto.id)
+        if( resultado.error) {
+            return {error: resultado.error, status: resultado.status}
+        } else {
+            return {message: resultado.message, status: resultado.status}
+        }
+         
+    }
+}
+
 // Funciones de uso interno
 function validarDatos(nombre, categoria, precio, stock){
     if(!nombre || !categoria || !precio || !stock){
