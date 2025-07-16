@@ -11,5 +11,4 @@ productoRouter.get('/buscarProducto/:nombre', buscarProducto)
 productoRouter.post('/crearProducto', auth, crearProducto)
 productoRouter.put('/modificarProducto/:nombre', auth, modificarProducto)
 productoRouter.delete('/eliminarProducto/:nombre', auth, eliminarProducto)
-//productoRouter.put('/comprarProducto/:nombre/:cant, comprarProducto) // busca el nombre del producto, resta la cantidad del stock y devuelve el producto con un mensaje
 export default productoRouter

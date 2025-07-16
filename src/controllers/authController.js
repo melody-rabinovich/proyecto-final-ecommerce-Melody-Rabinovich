@@ -11,7 +11,6 @@ export const login = async (req, res) => {
   }
 
   try {
-    //const snapshot = await db.collection('usuarios').where('email', '==', email).get();
 
     const q = query(usuarios, where('email', '==', email));
     const snapshot = await getDocs(q);
