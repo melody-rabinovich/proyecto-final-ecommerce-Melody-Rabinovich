@@ -47,7 +47,7 @@ Devuelve una lista de todos los productos cuyos nombres o categorías incluyan e
 
 ##### Ejemplos exitosos:
 ```
-GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/filtrar?nombre=manzana
+GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/filtrar?nombre=arroz
 
 GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/filtrar?categoria=frutas
 ```
@@ -97,7 +97,7 @@ GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/buscarPr
 ### Los siguientes endpoints requieren de autorización
 Hay casos de uso exclusivamente para administradores, ya que pueden vulnerar la privacidad de la API.
 En caso de ser un administrador, se requiere un log in previo, para realizar operaciones como crear, actualizar y eliminar productos.
-El Log In proporciona un token, necesario para autorizar las operaciones
+El Log In proporciona un token, a través de JWT (JSON Web Token) necesario para autorizar las operaciones
 
 
 ####  Acceder con Log In
@@ -116,7 +116,14 @@ En caso de que el mail y la contraseña sean correctos, la api devuelve un objet
 ###### Errores posibles:
 - Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
 - Errores en el body: si al body le faltan propiedades o están mal escritas, devuelve un error
-- Sin resultados: si no se encuentra el usuario, se retorna un JSON indicandolo
+- Sin resultados: si no se encuentra el usuario autorizado, se retorna un JSON indicandolo
+
+#### Cómo usar el token:
+El token debe ser incluido en el header de autorización en cada solicitud protegida, así:
+```
+Authorization: Bearer {token}
+```
+
 
 
 ####  Crear un producto:
@@ -134,17 +141,17 @@ Requiere autorización, agrega el nuevo producto a la base de datos, y devuelve 
 
 ##### Ejemplo exitoso:
 ```
-GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/buscarProducto/arroz
+POST https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/crearProducto
 ```
 
 **Body (JSON):**
 
 ```json
 {
-  "nombre": "Manzana verde",
+  "nombre": "mandarina",
   "precio": 250,
   "stock": 100,
-  "categoria": "Frutas y verduras"
+  "categoria": "frutas y verduras"
 }
 ```
 
@@ -171,20 +178,39 @@ Requiere autorización, actualiza la base de datos con las modificaciones y devu
 
 ##### Ejemplo exitoso:
 ```
-PUT https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/modificarProducto/
+PUT https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/modificarProducto/palta
 ```
+**Body (JSON):**
 
+{
+    "nombre" : "palta",
+    "categoria" : "frutas y verduras",
+    "precio" : 1200,
+    "stock" : 10
+}
 
 
 ###### Errores posibles:
 - Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
 - Errores en el body: si al body le faltan propiedades o están mal escritas, devuelve un error indicándolo
-- Producto ya existente: si se encuentra un producto con el mismo nombre, no permite agregarlo y retorna un JSON indicandolo
+- Producto no encontrado: si no se encuentra un producto con el mismo nombre, no se puede modificar.
 
 
+####  Eliminar un producto:
+**PUT** https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/eliminarProducto/:nombre
+
+Requiere autorización, elimina el producto de la base de datos y devuelve un mensaje comunicando el estado de la operación.
+
+##### Ejemplo exitoso:
+```
+DELETE https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/eliminarProducto/palta
+```
 
 
-
+###### Errores posibles:
+- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
+- Falta de parámetros de búsqueda: si no se incluye el parámetro de nombre, la ruta será incorrecta
+- Producto no encontrado: si no se encuentra un producto con el mismo nombre, no se puede eliminar.
 
 
 
