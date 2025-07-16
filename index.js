@@ -11,13 +11,13 @@ const app = express();
 
 app.use(cors({
     origin: 'http://localhost:5000',
-    methods : ['GET', 'POST', 'PUT', 'DELETE'] // ?
+    methods : ['GET', 'POST', 'PUT', 'DELETE'] 
 }))
 
 app.use(express.json())
 
-app.use(authRouter);
-app.use(productoRouter)
+app.use('/auth' , authRouter);
+app.use('/api/products', productoRouter)
 
 app.get('/', (req, res)=>{
     res.json({message:"API Rest en Node js"})
