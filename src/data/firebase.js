@@ -24,27 +24,30 @@
 
 
 import admin from 'firebase-admin';
-import fs from 'fs/promises'; // usamos la versión async
+import fs from 'fs';              // para readFileSync
+import fsp from 'fs/promises';   // para readFile async
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// __dirname equivalente en ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Ruta absoluta al archivo
 const keyPath = path.resolve(__dirname, '../../firebaseKey.json');
 
-// Leer el archivo JSON de forma asíncrona
-const raw = await fs.readFile(keyPath, 'utf8');
-const serviceAccount = JSON.parse(raw);
+// Si querés leer de forma síncrona
+const rawSync = fs.readFileSync(keyPath, 'utf8');
+const serviceAccountSync = JSON.parse(rawSync);
 
-// Inicializar Firebase Admin
+// O si preferís async/await
+const rawAsync = await fsp.readFile(keyPath, 'utf8');
+const serviceAccountAsync = JSON.parse(rawAsync);
+
+// Inicializá Firebase con una de las dos
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccountSync),
+  // o credential: admin.credential.cert(serviceAccountAsync),
 });
 
-// Exportar instancia de Firestore
 const db = admin.firestore();
 
 export default db;
