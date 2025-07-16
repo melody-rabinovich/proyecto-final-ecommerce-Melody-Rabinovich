@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db  from '../models/firebase.js';
+import { collection, query, where, getDocs, getDoc, addDoc, doc, updateDoc, deleteDoc} from 'firebase/firestore';
+const usuarios = collection(db, "usuarios")
 
 export const login = async (req, res) => {
   const { email, contraseña } = req.body;
@@ -9,7 +11,10 @@ export const login = async (req, res) => {
   }
 
   try {
-    const snapshot = await db.collection('usuarios').where('email', '==', email).get();
+    //const snapshot = await db.collection('usuarios').where('email', '==', email).get();
+
+    const q = query(usuarios, where('email', '==', email));
+    const snapshot = await getDocs(q);
 
     if (snapshot.empty) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
