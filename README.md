@@ -197,7 +197,7 @@ PUT https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/modifica
 
 
 ####  Eliminar un producto:
-**PUT** https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/eliminarProducto/:nombre
+**DELETE** https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/eliminarProducto/:nombre
 
 Requiere autorización, elimina el producto de la base de datos y devuelve un mensaje comunicando el estado de la operación.
 
