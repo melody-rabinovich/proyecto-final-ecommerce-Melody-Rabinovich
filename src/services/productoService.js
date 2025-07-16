@@ -36,7 +36,7 @@ export async function filtrar(nombre, categoria){
 }
 
 export async function productoPrecioMenorA (precio){
-    if(!precio || typeof parseInt(precio) == NaN ){
+    if(!precio || isNaN(parseInt(precio)) ){
         return {error: "se requiere un precio y debe ser un número", status : 401 }
     } else{
         const resultado = await model.productosPrecioMenorA(parseInt(precio))
