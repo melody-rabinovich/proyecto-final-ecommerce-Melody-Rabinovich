@@ -2,7 +2,10 @@ import admin from 'firebase-admin';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import serviceAccount from '../../firebaseKey.json' assert { type: 'json' }; 
+// import serviceAccount from '../../firebaseKey.json' assert { type: 'json' }; 
+import fs from 'fs';
+const serviceAccount = JSON.parse(fs.readFileSync('./firebaseKey.json', 'utf8'));
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const keyPath = path.resolve(__dirname, '../../firebaseKey.json');
