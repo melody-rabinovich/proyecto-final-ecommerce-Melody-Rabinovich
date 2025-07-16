@@ -1,8 +1,11 @@
-import db from '../data/firebase.js'
+// import db from '../data/firebase.js' // !
+import db from './firebase.js' // !
+import { collection, query, where, getDocs, getDoc, addDoc, doc, updateDoc, deleteDoc} from 'firebase/firestore'; // !
 
+const productsCollection = collection(db, "productos") // !
 export async function getAllProducts(){
     try{
-        const snapshot = await db.collection("productos").get();
+        const snapshot = await getDocs(productsCollection) // !
         const productos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         return productos;
     } catch(error){
@@ -14,7 +17,7 @@ export async function getAllProducts(){
 export async function filtrar(filtro, nombreFiltro){
     
     try{
-        const snapshot = await db.collection('productos').get();
+        const snapshot = await getDocs(productsCollection) // !
         const productos = snapshot.docs
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .filter(p => p[nombreFiltro].toLowerCase().includes(filtro.toLowerCase()));
@@ -29,7 +32,9 @@ export async function filtrar(filtro, nombreFiltro){
 
 export async function productosPrecioMenorA(precio){
     try{
-        const snapshot = await db.collection("productos").where("precio", "<=", precio).get()
+        const q = query(productsCollection, where("precio", "<=", precio)); // !
+        const snapshot = await getDocs(q);// !
+        //const snapshot = await getDocs(productsCollection).where("precio", "<=", precio).get()
         
         const productos = snapshot.docs.map(doc => ({
             id: doc.id,
@@ -45,7 +50,10 @@ export async function productosPrecioMenorA(precio){
 
 export async function buscarProducto(nombreBuscado){
     try{
-        const snapshot = await db.collection("productos").where("nombre", "==", nombreBuscado).get();
+       // const snapshot = await db.collection("productos").where("nombre", "==", nombreBuscado).get();
+       const q = query(productsCollection, where("nombre", "==", nombreBuscado));
+       const snapshot = await getDocs(q)
+
         if(snapshot.empty){
             return null
         }
@@ -70,7 +78,8 @@ export async function crearProducto(nombre, categoria, precio, stock){
             precio: precio,
             stock: stock
         }
-        await db.collection("productos").add(nuevoProducto);
+        //await db.collection("productos").add(nuevoProducto);
+        const docRef = await addDoc(productsCollection, nuevoProducto); //!
         return {message: "producto agregado", nuevoProducto}
     } catch (error){
         console.error(error);
@@ -86,13 +95,20 @@ export async function modificarProducto(nombre, categoria, precio, stock){
             return {error: "no se encontró el producto", status:404}
         } else {
             const id = producto.id;
-            await db.collection('productos').doc(id).update({
+            const docRef = doc(productsCollection, id); // !
+            await updateDoc(docRef, {
                 categoria,
                 precio,
                 stock
             });
+            /**await db.collection('productos').doc(id).update({
+                categoria,
+                precio,
+                stock
+            });*/
             
-            const docActualizado = await db.collection('productos').doc(id).get();
+            //const docActualizado = await db.collection('productos').doc(id).get(); 
+            const docActualizado = await getDoc(docRef); //!
 
             return {
                 message: "producto modificado",
@@ -110,7 +126,8 @@ export async function modificarProducto(nombre, categoria, precio, stock){
 
 export async function eliminarProducto(id){
     try {
-        await db.collection('productos').doc(id).delete();
+        //await db.collection('productos').doc(id).delete();
+        await deleteDoc(doc(productsCollection, id)) // !
         return { message: "Producto eliminado correctamente", status : 200 };
     } catch (error) {
         console.error(error);

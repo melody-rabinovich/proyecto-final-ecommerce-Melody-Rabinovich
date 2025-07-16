@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import db  from '../data/firebase.js';
+import db  from '../models/firebase.js';
 
 export const login = async (req, res) => {
   const { email, contraseña } = req.body;
