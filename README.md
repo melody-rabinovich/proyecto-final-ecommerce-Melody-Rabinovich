@@ -19,7 +19,9 @@ $ git clone https://github.com/melody-rabinovich/proyecto-final-ecommerce-Melody
 $ cd proyecto-final-ecommerce-Melody-Rabinovich
 $ npm install 
 ```
-2. Correr el programa de manera local:
+2. Configurar las variables de entorno
+
+3. Correr el programa de manera local:
 ```bash
 $ npm run start
 ```
@@ -53,9 +55,9 @@ GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/filtrar?
 ```
 
 ###### Errores posibles
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Falta de parámetros de búsqueda: si no se incluye al menos uno de los filtros (nombre o categoria), la API devuelve un mensaje de error.
-- Sin resultados: si no se encuentran productos que coincidan con el filtro, se retorna un JSON indicandolo
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Falta de parámetros de búsqueda:** si no se incluye al menos uno de los filtros (nombre o categoria), la API devuelve un mensaje de error.
+- **Sin resultados:** si no se encuentran productos que coincidan con el filtro, se retorna un JSON indicandolo
 
 
 
@@ -70,10 +72,10 @@ GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/filtrar/
 ```
 
 ###### Errores posibles:
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Falta de parámetros de búsqueda: si no se incluye el parámetro de precio, la ruta será incorrecta
-- Parámetro erróneo: el parámetro debe ser un número
-- Sin resultados: si no se encuentran productos que coincidan con el filtro, se retorna un JSON indicandolo
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Falta de parámetros de búsqueda:** si no se incluye el parámetro de precio, la ruta será incorrecta
+- **Parámetro erróneo:** el parámetro debe ser un número
+- **Sin resultados:** si no se encuentran productos que coincidan con el filtro, se retorna un JSON indicandolo
 
 
 ####  Buscar producto por nombre:
@@ -87,9 +89,9 @@ GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/buscarPr
 ```
 
 ###### Errores posibles:
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Falta de parámetros de búsqueda: si no se incluye el parámetro de nombre, la ruta será incorrecta
-- Sin resultados: si no se encuentran productos que coincidan con el filtro, se retorna un JSON indicandolo
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Falta de parámetros de búsqueda:** si no se incluye el parámetro de nombre, la ruta será incorrecta
+- **Sin resultados:** si no se encuentran productos que coincidan con el filtro, se retorna un JSON indicandolo
 
 
 
@@ -114,9 +116,9 @@ El Log In proporciona un token, a través de JWT (JSON Web Token) necesario para
 En caso de que el mail y la contraseña sean correctos, la api devuelve un objeto de tipo JSON, con un token, el cual es válido por dos horas, y necesario para los siguientes endpoints
 
 ###### Errores posibles:
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Errores en el body: si al body le faltan propiedades o están mal escritas, devuelve un error
-- Sin resultados: si no se encuentra el usuario autorizado, se retorna un JSON indicandolo
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Errores en el body:** si al body le faltan propiedades o están mal escritas, devuelve un error
+- **Sin resultados:** si no se encuentra el usuario autorizado, se retorna un JSON indicandolo
 
 #### Cómo usar el token:
 El token debe ser incluido en el header de autorización en cada solicitud protegida, así:
@@ -157,9 +159,9 @@ POST https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/crearPr
 
 
 ###### Errores posibles:
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Errores en el body: si al body le faltan propiedades o están mal escritas, devuelve un error indicándolo
-- Producto ya existente: si se encuentra un producto con el mismo nombre, no permite agregarlo y retorna un JSON indicandolo
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Errores en el body:** si al body le faltan propiedades o están mal escritas, devuelve un error indicándolo
+- **Producto ya existente:** si se encuentra un producto con el mismo nombre, no permite agregarlo y retorna un JSON indicandolo
 
 
 ####  Modificar un producto:
@@ -191,9 +193,9 @@ PUT https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/modifica
 
 
 ###### Errores posibles:
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Errores en el body: si al body le faltan propiedades o están mal escritas, devuelve un error indicándolo
-- Producto no encontrado: si no se encuentra un producto con el mismo nombre, no se puede modificar.
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Errores en el body:** si al body le faltan propiedades o están mal escritas, devuelve un error indicándolo
+- **Producto no encontrado:** si no se encuentra un producto con el mismo nombre, no se puede modificar.
 
 
 ####  Eliminar un producto:
@@ -208,9 +210,9 @@ DELETE https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/elimi
 
 
 ###### Errores posibles:
-- Error en la conexión a la base de datos: puede deberse a problemas de red o configuración de Firebase.
-- Falta de parámetros de búsqueda: si no se incluye el parámetro de nombre, la ruta será incorrecta
-- Producto no encontrado: si no se encuentra un producto con el mismo nombre, no se puede eliminar.
+- **Error en la conexión a la base de datos:** puede deberse a problemas de red o configuración de Firebase.
+- **Falta de parámetros de búsqueda:** si no se incluye el parámetro de nombre, la ruta será incorrecta
+- **Producto no encontrado:** si no se encuentra un producto con el mismo nombre, no se puede eliminar.
 
 
 
@@ -221,7 +223,7 @@ DELETE https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/elimi
 - Cada producto tiene un nombre único y la base de datos no permite duplicados
 
 
-## Autor
+## Autora
 
 - Nombre: Melody Maia Rabinovich
 - Curso: Back-End / Node JS
