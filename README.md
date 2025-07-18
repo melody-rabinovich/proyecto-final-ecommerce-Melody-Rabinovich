@@ -32,7 +32,7 @@ Para interactuar con la API se recomienda utilizar herramientas como Postman o T
 
 ## Endpoints y casos de uso
 
-#####  Acceder a todos los productos
+####  Acceder a todos los productos
 ```
 GET https://proyecto-final-ecommerce-melody-rab.vercel.app/api/products/getAllProducts
 ```
